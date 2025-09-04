@@ -4,9 +4,10 @@ class Usuario {
     private $nombreUsuario;
     private $email;
     private $contrasena;
+    private $bd;
 
     public function __construct($nombreUsuario,$email,$contrasena,
-     $id=0)
+     $id=0,$bd)
     {
         $this->nombreUsuario=$nombreUsuario;
         $this->email=$email;
@@ -86,6 +87,55 @@ class Usuario {
 
         return $this;
     }
+    //CRUD
+
+    public function getUsuarioPorNU($nombreUsuario){
+        $stmt = $this->bd->prepare('SELECT * FROM usuarios where 
+        nombre_usuario= ?');
+        $stmt->execute([$nombreUsuario]);
+        $user =$stmt->fetch(PDO::FETCH_ASSOC);
+        if ($user){
+            $this-id=$user['id'];
+            $this->nombreUsuario=$user['nombre_usuario'];
+            $this->contrasena=$user['contrasena'];
+            $this->email=$user['email'];
+
+        }
+        public static function getListaUsuarios($bd){
+            $stmt = $bd->query("SELECT * FROM usuarios");
+            return $stmt-fetchAll(PDO::FETCH_ASSOC);
+
+        } 
+        //método de la clase que inserta o actualiza un usuario
+
+        public function guardar() {
+            if($this->id==o){
+                //queremos insertar
+                $stmt = $this->bd->prepare("INSERT INTO usuarios(nombre_usuario,
+                email, contrasena) VALUES(?,?,?)");
+                $resultado= $stmt->execute([$this->nombreUsuario,
+                $this->email,
+                password:hash($this->contrasena,PASSWORD)]);
+            
+
+            if (resultado){
+                $this->id=$this->bd->lastIsertId();
+            }
+        }else{
+                //actualizar
+                $stmt =$this->bd->prepare("UPDATE usuarios set
+                nombre_usuario=?, email=?, contrasena=? where id=?");
+                $stmt->execute([$this->nombreUsuario,$this->email,$this->contrasena,
+                 $this->id]);
+                }
+            }
+
+        }
+
+
+
+    }
+
     
 }
 
